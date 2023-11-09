@@ -3,29 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>Javascript History Tabs</title>
-    <script lang="Javascript">    
-        function historyChange(event) 
-        {
-            alert('hash changed!');
-            document.getElementById("outputValue").value+=JSON.stringify(event.state);
-        }    
-       
-        function updateHistory(token)
-        {
+    <script lang="Javascript"> 
+
+      function showDialog(token)
+      {
+          alert("showing dialog: "+token);
+
+          // We need an if-statement and a way to avoid saving history when called from historyChange
+          // Otherwise we end up in an endless loop returning to the second to last page
+
           history.pushState(token, "Titel: "+token, "");
-        }
-       
-        function setupHistory()
-        {
-          document.getElementById("outputValue").value=history.state;  
-          window.onpopstate = function(event) { historyChange(event); };
-        }
+      }
+
+      function historyChange(event) 
+      {
+          alert('token changed to: '+event.state);
+          showDialog(event.state);
+      }
+
+      function setupHistory()
+      {
+        document.getElementById("outputValue").value=history.state;  
+        window.onpopstate = function(event) { historyChange(event); };
+      }
     </script>
   </head>       
   <body onload="setupHistory();" >
-    <input type="button" value="A" onclick="updateHistory('A');">
-    <input type="button" value="B" onclick="updateHistory('B');">
-    <input type="button" value="C" onclick="updateHistory('C');">
+    <input type="button" value="A" onclick="showDialog('A');">
+    <input type="button" value="B" onclick="showDialog('B');">
+    <input type="button" value="C" onclick="showDialog('C');">
     <input type="text" id="outputValue"></div>
   </body>
 </html>
