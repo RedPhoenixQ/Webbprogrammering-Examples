@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>React Example</title>
+</head>
+<body>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+<div id="content"></div>
+<script type="text/babel">
+
+class Product extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        data:{name:"Not fetched yet!"}
+    };  
+    this.handleClick = this.handleClick.bind(this);
+  }
+  async handleClick() {
+    alert("Hello!");
+
+    const response = await fetch("../Avancerad-Webb-API/Ort.php", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'}
+    })
+    .then((response) => response.json()).then(data => {
+        console.log(data);
+        this.setState({data:data});  
+    });
+
+  }  
+  render() {
+    return (
+      <div>
+      <button onClick={this.handleClick}>Click to Fetch</button>
+      <p>{this.state.data.name}</p>
+      </div>
+    );
+  }
+}
+
+ReactDOM.render(
+  <Product />,  document.getElementById('content')
+);
+
+</script>
+</body>
+</html>

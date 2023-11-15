@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>React Example</title>
+</head>
+<body>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+<div id="content"></div>
+<script type="text/babel">
+
+function tick() {
+  const element = `
+    <div>
+      <h1>Clock</h1>
+      <h2>${new Date().toLocaleTimeString()}</h2>
+    </div>`;
+  document.getElementById('content').innerHTML=element;
+}
+
+setInterval(tick, 1000);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+<hmtl>
+<body>
+<div id='content'></div>
+<script>
+  const params = {
+    ort: "Arjeplog"
+  }
+
+  async function getData(){
+      const response = await fetch("../Avancerad-Webb-API/Ort.php", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'},
+        body:JSON.stringify(params)
+      })
+      .then((response) => response.json()).then(data => {
+        console.log(data);
+      });
+  }
+
+  getData();
+
+</script>
+</body>
+</hmtl>
+

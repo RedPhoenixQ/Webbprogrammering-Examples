@@ -1,0 +1,54 @@
+</script>
+</body>
+</hmtl>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>React Example</title>
+</head>
+<body>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+<div id="content"></div>
+<script type="text/babel">
+
+function Product(props) {
+  return <li>{props.name} {props.color}</li>;
+}
+
+class ProductList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    const listItems = this.props.codes.map((code) =>
+        <Product key={code.code} name={code.name} color={code.color} />  
+    );
+    return (
+      <ul>{listItems}</ul>
+    );
+  }
+}
+
+async function getData(){
+    const response = await fetch("../Avancerad-Webb-API/Climatecodes.php", {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json'}
+    })
+    .then((response) => response.json()).then(data => {
+        console.log(data);
+
+        ReactDOM.render(
+              <ProductList codes={data} />,
+              document.getElementById('content')
+          );        
+    });
+  }
+
+  getData();
+
+</script>
+</body>
+</html>
