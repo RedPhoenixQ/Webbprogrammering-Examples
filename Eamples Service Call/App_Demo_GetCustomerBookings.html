@@ -1,0 +1,55 @@
+<html>
+<head>
+		<link rel="stylesheet" href="style.css">
+		<script>
+		
+		// For students, User name of student to differentiate between different applications on the server
+		var apptype="Hotel_Demo";
+		
+		//------------------------------------------------------------------------
+		// make customer
+		//------------------------------------------------------------------------
+		// Creates a new customer with a given id, name, address etc
+		// Customers are general for ALL booking systems, so no need to add type attribute
+		//------------------------------------------------------------------------
+
+		function getBookings()
+		{
+				var input={ 
+								customerID: document.getElementById("customerIDB").value,
+                type: apptype
+				}
+				console.log(input);
+
+				fetch('../booking/getcustomerbookings_JSON.php', {
+					  method: 'POST', // or 'PUT'
+					  headers: {'Content-Type': 'application/json'},
+					  body: JSON.stringify(input)
+					})
+					.then(function(response) {                      // first then()
+				      if(response.ok) return(response.json());
+      				throw new Error(response.statusText);
+  				}).then(function(data){
+							ResultBookingsCustomer(data);
+					}).catch(function(error) {                        // catch
+    					alert('Request failed\n'+error);
+  				});				
+		}
+	
+		function ResultBookingsCustomer(returnedData)
+		{
+        console.log(returnedData);
+		}				
+
+		</script>
+</head>
+<body>
+
+	<div class="actionbox">
+			<span class="actionheading">Get bookings for Customer</span>
+			CustID:<input type='text' name='customerIDB' id='customerIDB'>
+			<input type="button" onclick="getBookings();" value="Get Bookings">
+	</div>
+	
+</body>
+</html>

@@ -165,7 +165,7 @@
 			// Search Query!
 			//---------------------------------------------------------------------------------------------------------------
 
-			$querystring="SELECT * FROM booking,resource WHERE resource.ID=booking.resourceID AND type=:FILTER ORDER BY customerID,company,location,booking.date,position";
+			$querystring="SELECT booking.cost as cost,booking.auxdata as auxdata,customerID,resourceID,date,dateto,position,rebate,name,status,company,location,type FROM booking,resource WHERE resource.ID=booking.resourceID AND type=:FILTER ORDER BY customerID,company,location,booking.date,position";
 			$stmt = $pdo->prepare($querystring);
 			$stmt->bindParam(':FILTER',$filter);
 			$stmt->execute();
@@ -245,6 +245,7 @@
 					$str.= "    <td class='result'>".$row['rebate']."</td>\n";
 					$str.= "    <td class='result'>".$row['status']."</td>\n";
 					$str.= "    <td class='result'>".$row['auxdata']."</td>\n";
+          
 					$str.= "<td class='result'>";
 					$str.= "<form action='editbooking.php' method='POST'>";
 					$str.= "<input type='hidden' name='customer' value='".$row['customerID']."'>";

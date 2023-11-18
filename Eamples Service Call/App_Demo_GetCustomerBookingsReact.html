@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>React Example</title>
+<style>
+  span {border-left:2px solid red; margin-left: 4px;}
+</style>
+<script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+
+<script>
+
+// For students, User name of student to differentiate between different applications on the server
+var apptype="Hotel_Demo";
+
+//------------------------------------------------------------------------
+// get Bookings
+//------------------------------------------------------------------------
+// Gets bookings using JSON - key was added to support React Element Keys
+//------------------------------------------------------------------------
+
+function getBookings()
+{
+		var input={ 
+						customerID: document.getElementById("customerIDB").value,
+            type: apptype
+		}
+
+		fetch('../booking/getcustomerbookings_JSON.php', {
+			  method: 'POST', // or 'PUT'
+			  headers: {'Content-Type': 'application/json'},
+			  body: JSON.stringify(input)
+			})
+			.then(function(response) {                      // first then()
+		      if(response.ok) return(response.json());
+  				throw new Error(response.statusText);
+			}).then(function(data){
+					ResultBookingsCustomer(data);
+			}).catch(function(error) {                        // catch
+					alert('Request failed\n'+error);
+			});				
+}
+
+</script>
+
+<script type="text/babel">
+
+function Product(props) {
+  return <li>
+         <span>{props.customerID}</span>
+         <span>{props.date}</span>
+         </li>;
+
+}
+
+class ProductList extends React.Component {
+
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    const listItems = this.props.bookings.map((booking) =>
+        <Product key={booking.key} customerID={booking.customerID} date={booking.date}/>  
+    );
+    return (
+      <ul>{listItems}</ul>
+    );
+  }
+}
+
+function ResultBookingsCustomer(returnedData)
+{
+    // Here we render using React
+    ReactDOM.render(
+      <ProductList bookings={returnedData} />,  document.getElementById('content')
+    );
+}				
+
+</script>
+</head>
+<body>
+
+	<div class="actionbox">
+			<span class="actionheading">Get bookings for Customer</span>
+			CustID:<input type='text' name='customerIDB' id='customerIDB'>
+			<input type="button" onclick="getBookings();" value="Get Bookings">
+	</div>
+	
+  <div id="content"></div>
+
+</body>
+</html>
