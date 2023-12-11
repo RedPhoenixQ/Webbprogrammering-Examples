@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <script>
+          var ctx;
+          
+          function drawelements(eleno)
+          {
+                // Clear Screen
+                ctx.clearRect ( 0 , 0 , 800 , 800 );
+                
+                ctx.strokeStyle="#000";
+                
+                // Rectangle
+                if(eleno==1){
+                    ctx.fillStyle = '#B3D676';
+                }else{
+                    ctx.fillStyle = '#9677B5';
+                }
+                ctx.fillRect(50, 100, 50, 50);  
+                ctx.strokeRect(50, 100, 50, 50);                          
+ 
+                // Triangle
+                if(eleno==2){
+                    ctx.fillStyle = '#B3D676';
+                }else{
+                    ctx.fillStyle = '#9677B5';
+                }
+                ctx.beginPath();
+                ctx.moveTo(125, 75);
+                ctx.lineTo(150,250);
+                ctx.lineTo(250, 100);
+                ctx.lineTo(125, 75);
+                ctx.fill();
+                ctx.stroke();
+                
+                // Circle
+                if(eleno==3){
+                    ctx.fillStyle = '#B3D676';
+                }else{
+                    ctx.fillStyle = '#9677B5';
+                }
+                ctx.beginPath();
+                ctx.arc(225,275,50,0,2*Math.PI);
+                ctx.fill();
+                ctx.stroke();
+ 
+          }
+          
+          function startupCanvas()
+          {
+              var elem = document.getElementById('myCanvas');
+              if (elem && elem.getContext) {
+                ctx = elem.getContext('2d');
+                drawelements(0);
+              }                  
+          }
+                    
+      </script>
+  </head>
+<body onload="startupCanvas();">
+  
+<img width="400" height="400" style='border: 2px red dotted;position:absolute;top:0px;left:0px;z-index:100'  alt="Canvas" usemap="#canvasmap" style="border:1px red solid" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQMAAAC6caSPAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAACpJREFUeNrtwYEAAAAAw6D7Ux9gCtUAAAAAAAAAAAAAAAAAAAAAAAAAgDhPsAABa0Zz3QAAAABJRU5ErkJggg==" />
+ 
+<map name="canvasmap">
+  <area shape="rect"   coords="50,100,100,150"      onclick="alert('You clicked area 1')" onmouseover="drawelements(1);" onmouseout="drawelements(0);" />
+  <area shape="poly"   coords="125,75,150,250,250,100"  onclick="alert('You clicked area 2')" onmouseover="drawelements(2);" onmouseout="drawelements(0);" />
+  <area shape="circle"   coords="225,275,50"  onclick="alert('You clicked area 3')" onmouseover="drawelements(3);" onmouseout="drawelements(0);" />
+</map>
+ 
+<canvas id='myCanvas' width='400' height='400' style='border: 1px black solid;position:absolute;top:0px;left:0px;z-index:-1' />
+ 
+</body>
+</html>

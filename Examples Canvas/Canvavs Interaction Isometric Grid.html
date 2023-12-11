@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript">
+        //Declaration of globals
+        var acanvas,c;
+        
+        // Tile Parameters - We need width and height of tiles as well as offset to te left and top of first tile
+        // Each ground tile is approximately 82 by 48 units and therefore the transform is roughly half that at 41 and 24
+        var tileWidth=41;
+        var tileHeight=24;
+        var tileOffsX=150;
+        var tileOffsY=33;
+        var tileLean=tileWidth/tileHeight;
+        
+        // Current Hover Tile
+        var hx,hy=0;        
+        
+        // Tilemap
+        var tiles=[[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0],[0,0,0,0,0]];          
+        
+        //Initializations 
+        function init()
+        {  
+            acanvas=document.getElementById("a");
+            c=acanvas.getContext("2d");
+            acanvas.addEventListener('contextmenu', function(event){console.log("onContextMenu");event.preventDefault();}, false); //Prevent the context menu to be displayed when right mouse button is clicked on the canvas
+    
+            drawTiles();            
+        }      
+        
+        function drawTiles()
+        {
+            c.clearRect(0, 0, 398, 458);
+            
+            // Redraw Tiles
+            for(cy=0;cy<5;cy++){
+                for(cx=0;cx<5;cx++){
+                    if(cx==hx&&cy==hy){
+                        drawBoxBlue(tileOffsX+(-tileWidth*cy)+(cx*tileWidth),tileOffsY+(cy*tileHeight)+(cx*tileHeight));                      
+                    }else if(tiles[cx][cy]==0){
+                        drawFloor(tileOffsX+(-tileWidth*cy)+(cx*tileWidth),tileOffsY+(cy*tileHeight)+(cx*tileHeight));                        
+                    }else{
+                        drawBoxGreen(tileOffsX+(-tileWidth*cy)+(cx*tileWidth),tileOffsY+(cy*tileHeight)+(cx*tileHeight));
+                    }
+                }
+            }        
+        }
+ 
+        // Screen coordinate to tilespace coordinate
+        function screenToTile(sx,sy)
+        {          
+            var txc=(((sy-tileOffsY)*tileLean)+(sx-tileOffsX))*0.5;
+            var tyc=(((sy-tileOffsY)*tileLean)-(sx-tileOffsX))*0.5;
+ 
+            // Number of tile
+            var tcx=Math.floor((txc/tileWidth)-0.5)-1;
+            var tcy=Math.floor((tyc/tileHeight/tileLean)-0.5);
+            
+            // Coordinate in tile
+            var tx=Math.floor((txc%tileWidth));
+            var ty=Math.floor((tyc%(tileHeight*tileLean)));
+ 
+            return {x:tcx, y:tcy} //Returns the tile coordinate
+        }
+        
+        //This function is called by the onmousemove event for the canvas element
+        function mouseMove(e){
+              var rect = e.target.getBoundingClientRect();
+              mx = e.clientX - rect.left; //x position within the element.
+              my = e.clientY - rect.top;  //y position within the element.        
+ 
+              var tc=screenToTile(mx,my);              
+              if(hx!=tc.x||hy!=tc.y){
+                  hx=tc.x;
+                  hy=tc.y;
+                  drawTiles();
+              }
+        }
+        
+        //This function is called when a mouse button is pressed down on the canvas element
+        function mouseDown(event){
+              var tc=screenToTile(mx,my);              
+              tiles[tc.x][tc.y]=1;
+              drawTiles();            
+        }
+        
+        //Draws a floor tile at coordinate X,Y cavas code imported from Cubeisometric.svg
+        function drawFloor(x,y){
+            c.save();
+            c.translate(x,y);
+ 
+            c.strokeStyle = "#000000";
+            c.beginPath();
+            c.moveTo(44.56,105.96);
+            c.lineTo(3.062,82.002);
+            c.lineTo(44.646,58.255);
+            c.lineTo(86.144,82.214);
+            c.lineTo(44.56,105.96);
+            c.globalAlpha = 1.0;
+            c.stroke();
+ 
+            c.restore();            
+        }
+ 
+        //Draws a floor tile at coordinate X,Y cavas code imported from Cubeisometric.svg
+        function drawBoxGreen(x,y){
+            c.save();
+            c.translate(x,y);
+ 
+            c.fillStyle = "#B3D676";
+            c.strokeStyle = "#000000";
+            c.beginPath();
+            c.moveTo(44.56,50.419);
+            c.lineTo(3.062,26.461);
+            c.lineTo(44.646,2.714);
+            c.lineTo(86.143,26.673);
+            c.lineTo(44.56,50.419);
+            c.globalAlpha = 1.0;
+            c.fill();
+            c.stroke();
+            
+            c.fillStyle = "#54B948";
+            c.strokeStyle = "#000000";
+            c.beginPath();
+            c.moveTo(86.142,82.002);
+            c.lineTo(44.646,105.96);
+            c.lineTo(44.646,50.631);
+            c.lineTo(86.143,26.673);
+            c.lineTo(86.142,82.002);
+            c.globalAlpha = 1.0;
+            c.fill();
+            c.stroke();
+            
+            c.fillStyle = "#E5EEBC";
+            c.strokeStyle = "#000000";
+            c.beginPath();
+            c.moveTo(3.147,81.502);
+            c.lineTo(44.643,105.46);
+            c.lineTo(44.643,50.131);
+            c.lineTo(3.146,26.173);
+            c.lineTo(3.147,81.502);
+            c.globalAlpha = 1.0;
+            c.fill();
+            c.stroke();
+            
+            c.restore();            
+        }
+ 
+        //Draws a floor tile at coordinate X,Y cavas code imported from Cubeisometric.svg
+        function drawBoxBlue(x,y){
+            c.save();
+            c.translate(x,y);
+ 
+            c.fillStyle = "#9677B5";
+            c.strokeStyle = "#000000";
+            c.beginPath();
+            c.moveTo(44.56,50.419);
+            c.lineTo(3.062,26.461);
+            c.lineTo(44.646,2.714);
+            c.lineTo(86.144,26.673);
+            c.lineTo(44.56,50.419);
+            c.globalAlpha = 1.0;
+            c.fill();
+            c.stroke();
+            
+            c.fillStyle = "#6F50A1";
+            c.strokeStyle = "#000000";
+            c.beginPath();
+            c.moveTo(86.142,82.002);
+            c.lineTo(44.646,105.96);
+            c.lineTo(44.646,50.631);
+            c.lineTo(86.144,26.673);
+            c.lineTo(86.142,82.002);
+            c.globalAlpha = 1.0;
+            c.fill();
+            c.stroke();
+            
+            c.fillStyle = "#D4BBDA";
+            c.strokeStyle = "#000000";
+            c.beginPath();
+            c.moveTo(3.147,81.502);
+            c.lineTo(44.643,105.46);
+            c.lineTo(44.643,50.131);
+            c.lineTo(3.146,26.173);
+            c.lineTo(3.147,81.502);
+            c.globalAlpha = 1.0;
+            c.fill();
+            c.stroke();
+            
+            c.restore();            
+        }
+                
+        </script>
+    </head>
+ 
+  <body onload='init();'>
+        <canvas id="a" width="398" height="458" style="border:1px solid #000;float:left;margin:5px;" onmousedown="mouseDown(event);" onmousemove="mouseMove(event, this);"></canvas>
+  </body>
+</html>

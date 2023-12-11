@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <script type="text/javascript">
+        //Declaration of globals
+        var ctx;
+    
+        //Initializations
+        function init()
+        {  
+              var acanvas=document.getElementById("a");
+              ctx=acanvas.getContext("2d");
+              acanvas.addEventListener('contextmenu', function(event){event.preventDefault();}, false); //Prevent the context menu to be displayed when right mouse button is clicked on the canvas
+        }      
+      
+        var mx=0,my=0;
+        function mouseMove(e, t){
+ 
+            var rect = e.target.getBoundingClientRect();
+            mx = e.clientX - rect.left; //x position within the element.
+            my = e.clientY - rect.top;  //y position within the element.        
+ 
+            //Draw a red circle at the mouse coordinates
+            drawDot(mx,my,5,"#f00");
+        }           
+ 
+          //This function is called when a mouse button is pressed down on the canvas element
+          function mouseDown(event){
+            
+                //Check which mouse button was pressed down
+                if(event.which==3)          
+                      drawDot(mx,my,15,"#0f0");  
+                else                        
+                      drawDot(mx,my,10,"#00f");  
+          }
+ 
+          //Draws a filled circle at the given position
+          function drawDot(x,y,size,color){
+                ctx.fillStyle = color;
+                ctx.beginPath();
+                ctx.arc(x, y, size, 0, Math.PI*2, false);
+                ctx.closePath();
+                ctx.fill();
+          }
+            
+        </script>
+    </head>
+ 
+  <body onload='init();'>
+        <canvas id="a" width="398" height="458" style="border:1px solid #000;float:left;margin:5px;" onmousedown="mouseDown(event);" onmousemove="mouseMove(event, this);"></canvas>
+  </body>
+</html>

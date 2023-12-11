@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+      var ctx;
+      var img;
+      // Array to hold snowflakes
+      var snowflakes = new Array(); 
+      
+      // Number of flakes
+      var numflakes=10;
+      
+      var mx,my;
+      
+      function drawAmoeba()
+      {
+            // Code available by viewing source in preview
+      }
+      
+      //This function is called by the onmousemove event for the canvas element 
+      function mouseMove(e, t){
+          var rect = e.target.getBoundingClientRect();
+          mx = e.clientX - rect.left; //x position within the element.
+          my = e.clientY - rect.top;  //y position within the element.        
+ 
+      } 
+      
+      //This function is called when a mouse button is pressed down on the canvas element
+      function mouseDown(event){
+            //Find the position of the canvas element
+            for(var i=0;i<numflakes;i++){
+              if(mx>(snowflakes[i].xk-10)&&mx<(snowflakes[i].xk+10)&&my>(snowflakes[i].yk-10)&&my<(snowflakes[i].yk+10)){
+                  snowflakes[i].xk=500;
+              }
+            }
+      } 
+ 
+      // Constructor for snowflakes
+      function Snowflake(xk, yk, spd) {
+       this.xk = xk;
+       this.yk = yk;
+       this.spd = spd;
+      }                         
+      
+      function drawgraphics()
+      {
+          ctx.clearRect(0,0,450,450);
+          
+          ctx.beginPath();
+          ctx.moveTo(mx-10,my-10);
+          ctx.lineTo(mx+10,my+10);
+          ctx.moveTo(mx+10,my-10);
+          ctx.lineTo(mx-10,my+10);
+          ctx.stroke();         
+             
+          for(var i=0;i<numflakes;i++){
+            ctx.save();
+            ctx.translate(snowflakes[i].xk,snowflakes[i].yk);
+            ctx.scale(0.25,0.25);     
+            drawAmoeba();
+            ctx.restore();
+            
+            snowflakes[i].yk+=snowflakes[i].spd;
+            if(snowflakes[i].yk>420) snowflakes[i].yk-=440;
+          }
+          setTimeout(function(){drawgraphics()}, 30);
+      }
+      
+      function startupCanvas()
+      {
+         for(var i=0;i<numflakes;i++){
+             var typ=Math.round(Math.random()*4);
+             snowflakes[i]=new Snowflake(Math.round(Math.random()*400),Math.round(Math.random()*400),1.0);          
+         }
+         
+        var elem = document.getElementById("myCanvas");
+        ctx = elem.getContext('2d');
+        drawgraphics();
+      }
+      
+    </script>
+</head>
+<body onload="startupCanvas();">
+        <canvas id="myCanvas" width="450" height="450" style="border:1px solid #000;float:left;margin:5px;" onmousedown="mouseDown(event);" onmousemove="mouseMove(event, this);"></canvas>
+        <br>
+</body>
+</html>

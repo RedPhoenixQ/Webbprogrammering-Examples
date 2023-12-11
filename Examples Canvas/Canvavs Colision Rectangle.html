@@ -1,0 +1,101 @@
+<html>
+<head>
+   <style>
+   </style>
+   
+   <script src="HSH_Procedural.js"></script>
+   
+   <script> 
+ 
+       var ctx;
+      var acanvas;
+      var cx,cy;
+              
+      function initcanvas()
+      {
+          acanvas = document.getElementById("myCanvas");
+          if (acanvas.getContext) {
+              ctx = acanvas.getContext("2d");
+              ctx.strokeRect(18,18,402,402);
+          }
+      } 
+     
+       function dashbox(x1,y1,x2,y2,fill)
+       {
+          ctx.setLineDash([4,2,2,2]);
+        
+          ctx.beginPath();
+          ctx.moveTo(x1,y1);
+          ctx.lineTo(x2,y1);
+          ctx.lineTo(x2,y2);
+          ctx.lineTo(x1,y2);
+          ctx.lineTo(x1,y1);        
+ 
+          if(fill){
+              ctx.fill();
+          }
+        
+          ctx.stroke();
+          
+      }
+     
+       function colision(x1,y1,x2,y2,x3,y3,x4,y4)
+       {
+          if(x1>x4||x2<x3) return false;
+          if(y4<y1||y3>y2) return false;                
+ 
+          return true;
+      }
+         
+       var x1=150;  
+       var y1=100;
+       var x2=200;
+       var y2=250;
+     
+      function redraw()
+      {
+          ctx.clearRect(0,0,700,700);
+        
+          // Position this box according to mouse coordinates
+           x3=mx-50;
+          y3=my-30;
+          x4=mx+100;
+          y4=my+40;
+          
+          // Fill stationary box if colision
+          ctx.fillStyle="#def";        
+          dashbox(x1,y1,x2,y2,colision(x1,y1,x2,y2,x3,y3,x4,y4));
+          dashbox(x3,y3,x4,y4,false);  
+ 
+          // Labels
+          ctx.fillStyle="#000";
+          ctx.fillText("y1",x2+4,y1+4);
+          ctx.fillText("y2",x2+4,y2+4);
+          ctx.fillText("y3",x4+4,y3+4);
+          ctx.fillText("y4",x4+4,y4+4);
+          ctx.fillText("x1",x1-8,y1-4);
+          ctx.fillText("x2",x2-8,y1-4);
+          ctx.fillText("x3",x3-8,y3-4);
+          ctx.fillText("x4",x4-8,y3-4);        
+      }
+     
+      function mousemoveevt(e, t){
+ 
+          var rect = e.target.getBoundingClientRect();
+          mx = e.clientX - rect.left; //x position within the element.
+          my = e.clientY - rect.top;  //y position within the element.        
+          
+          redraw();
+      } 
+        
+   </script>
+ 
+</head>
+<body onload="initcanvas();">
+  <div style="position:fixed;left:0px;top:0px;width:160px;height:32px;">
+    <input id="ringoStarr" type="range" min="0.0" max="10" step="0.5" >
+  </div>
+  <canvas id="myCanvas" width="600" height="600" style="border:2px dotted navy;" onmousemove="mousemoveevt(event,this);">
+  </canvas>
+</body>
+</html>

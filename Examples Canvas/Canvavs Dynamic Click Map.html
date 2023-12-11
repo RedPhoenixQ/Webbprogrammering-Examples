@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script>
+      var ctx;
+      var img;
+      // Array to hold snowflakes
+      var snowflakes = new Array(); 
+      
+      // Number of flakes
+      var numflakes=10;
+      
+      var hovering=-1;
+      
+      function drawAmoeba()
+      {
+            // Code available by viewing source in preview
+      }
+      
+      function clickElement(el)
+      {
+          snowflakes[el].xk=500;
+      }
+ 
+      function hoverElement(el)
+      {
+          hovering=el;    
+      }
+ 
+      // Constructor for snowflakes
+      function Snowflake(xk, yk, spd) {
+         this.xk = xk;
+         this.yk = yk;
+         this.spd = spd;
+      }                         
+      
+      function drawgraphics()
+      {
+          ctx.clearRect(0,0,450,450);  
+          
+          var str="";   
+          
+          for(var i=0;i<numflakes;i++){
+            ctx.save();
+            ctx.translate(snowflakes[i].xk,snowflakes[i].yk);
+            ctx.scale(0.25,0.25);     
+            
+            if(hovering==i){
+                drawAmoeba(0);
+            }else{
+                drawAmoeba(1);            
+            }
+ 
+            ctx.restore();
+            
+            str+="<area shape='circle'   coords='"+snowflakes[i].xk+","+snowflakes[i].yk+",25' ";
+            str+=" onmousedown='clickElement("+i+");' ";
+            str+=" onmouseover='hoverElement("+i+");' ";
+            str+=" />";
+            
+            snowflakes[i].yk+=snowflakes[i].spd;
+            if(snowflakes[i].yk>420) snowflakes[i].yk-=440;
+ 
+          }
+                    
+          document.getElementById("canvasmap").innerHTML=str;
+          
+          setTimeout(function(){drawgraphics()}, 30);
+      }
+      
+      function startupCanvas()
+      {
+          for(var i=0;i<numflakes;i++){
+             var typ=Math.round(Math.random()*4);
+             snowflakes[i]=new Snowflake(Math.round(Math.random()*400),Math.round(Math.random()*400),1.0);          
+          }
+ 
+          var elem = document.getElementById("myCanvas");
+            ctx = elem.getContext('2d');
+            drawgraphics();
+      }
+      
+    </script>
+</head>
+<body onload="startupCanvas();">
+   
+<img width="400" height="400" style='border: 2px red dotted;position:absolute;top:0px;left:0px;z-index:100'  alt="Canvas" usemap="#canvasmap" style="border:1px red solid" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZAAAAGQAQMAAAC6caSPAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAACpJREFUeNrtwYEAAAAAw6D7Ux9gCtUAAAAAAAAAAAAAAAAAAAAAAAAAgDhPsAABa0Zz3QAAAABJRU5ErkJggg==" />
+ 
+<map name="canvasmap" id="canvasmap">
+</map>
+ 
+<body onload="startupCanvas();">
+        <canvas id="myCanvas" width="450" height="450" style="border:1px solid #000;float:left;margin:5px;" onmousedown="mouseDown(event);" onmousemove="mouseMove(event, this);"></canvas>
+        <br>
+</body> 
+<br>
+</body>
+</html>
