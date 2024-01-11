@@ -12,8 +12,15 @@
       
       var mx,my;
       
-      function drawAmoeba()
+      function drawAmoeba(state)
       {
+            ctx.font = "44px Arial Narrow";
+            if(state){
+                ctx.fillStyle="#fe0";
+            }else{
+                ctx.fillStyle="#f0e";            
+            }
+            ctx.fillText("Placeholder",0,0);
             // Code available by viewing source in preview
       }
       
@@ -27,6 +34,7 @@
       
       //This function is called when a mouse button is pressed down on the canvas element
       function mouseDown(event){
+            
             //Find the position of the canvas element
             for(var i=0;i<numflakes;i++){
               if(mx>(snowflakes[i].xk-10)&&mx<(snowflakes[i].xk+10)&&my>(snowflakes[i].yk-10)&&my<(snowflakes[i].yk+10)){

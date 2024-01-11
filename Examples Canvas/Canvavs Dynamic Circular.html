@@ -12,8 +12,15 @@
       
       var mx,my;
       
-      function drawAmoeba()
+      function drawAmoeba(state)
       {
+            ctx.font = "44px Arial Narrow";
+            if(state){
+                ctx.fillStyle="#fe0";
+            }else{
+                ctx.fillStyle="#f0e";            
+            }
+            ctx.fillText("Placeholder",0,0);
             // Code available by viewing source in preview
       }
       
