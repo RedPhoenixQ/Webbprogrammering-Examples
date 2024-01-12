@@ -6,9 +6,8 @@ var objects = [
                 {x:120,y:120,width:20,height:20}              
               ];
 
-              var objects=[];
               for(var i=0;i<100;i++){
-                  objects.push(x:Math.random()*300,y:Math.random()*300,width:20,height:20);
+                  objects.push({x:Math.random()*300,y:Math.random()*300,width:20,height:20});
               }
 
 function redraw()
@@ -32,7 +31,7 @@ function redraw()
     for(obj of objects){
         ctx.save();
         ctx.translate(obj.x,obj.y);
-        ctx.scale(obj.size,obj].size);  
+        ctx.scale(obj.size,obj.size);  
         ctx.drawImage(img,-10,-10);
         ctx.restore();
     }
@@ -47,7 +46,7 @@ function redraw()
     for(obj of objects){
         ctx.save();
         ctx.translate(obj.x,obj.y);
-        ctx.scale(obj.size,obj].size);  
+        ctx.scale(obj.size,obj.size);  
         ctx.drawImage(img,-10,-10);
         ctx.restore();
 
@@ -63,7 +62,6 @@ function mouseMove(e, t){
  var rect = e.target.getBoundingClientRect();
  mx = e.clientX - rect.left; //x position within the element.
  my = e.clientY - rect.top;  //y position within the element.        
-}           
 
 var txc=(mx-tileOffsX);
 var tyc=(my-tileOffsY);
@@ -76,5 +74,9 @@ for(obj of objects){
             // Mouse has his this object
         }
 }
+
+}           
+
+
 
 </script>
