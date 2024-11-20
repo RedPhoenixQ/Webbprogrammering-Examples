@@ -55,7 +55,7 @@ try {
 	}
 
 	switch (determineResponseType()) {
-		case "xmls":
+		case "xml":
 			$output = "<avail>\n";
 			foreach ($stmt as $key => $row) {
 				$output .= "<availability \n";
@@ -92,7 +92,7 @@ try {
 			header("Content-Type:text/xml; charset=utf-8");
 			echo $output;
 			break;
-		case "xml":
+		case "json":
 		default:
 			header("Content-Type: application/json; charset=utf-8'");
 			$result = [];
