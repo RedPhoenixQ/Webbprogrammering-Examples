@@ -16,12 +16,12 @@
 			$auxdata=getpostAJAX("auxdata");
 			$type=getpostAJAX("type");
 
-			if($user=="UNK"||$resource=="UNK"||$date=="UNK"||$type=="UNK"||$status=="UNK"||$position=="UNK"){
+			if(is_null($user)||is_null($resource)||is_null($date)||is_null($type)||is_null($status)||is_null($position)){
 					err("Missing Form Data: (type/customerID/resourceID/date/position/status)");					
 			}
 
 			// Default to 1 day bookings
-			if($dateto == "UNK"){
+			if(is_null($dateto)){
 				$dateto = $date;
 			}
 
@@ -31,7 +31,7 @@
 			}
 
 			// Default rebate to 0
-			if($rebate == "UNK"){
+			if(is_null($rebate)){
 				$rebate = 0;
 			}
 

@@ -12,7 +12,7 @@
 		$email=getpostAJAX("email");
 		$auxdata=getpostAJAX("auxdata");
 		
-		if ($ID=="UNK" || $firstname=="UNK" || $lastname=="UNK" || $address=="UNK" || $email=="UNK") err("Missing Form Data: (ID/firstname/lastname/address/email)");
+		if (is_null($ID)|| is_null($firstname)|| is_null($lastname)|| is_null($address)|| is_null($email)) err("Missing Form Data: (ID/firstname/lastname/address/email)");
 
 		try{
 				$querystring="INSERT INTO customer(lastvisit,ID, firstname,lastname,address,email,auxdata) values (NOW(),:ID,:FIRSTNAME,:LASTNAME,:ADDRESS,:EMAIL,:AUXDATA);";

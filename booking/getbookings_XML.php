@@ -10,7 +10,7 @@
 			$date=getpostAJAX("date");
 			$type=getpostAJAX("type");
 
-			if($type=="UNK"){
+			if(is_null($type)){
 					err("Missing Form Data: (type)");					
 			}
 
@@ -18,10 +18,10 @@
 					// Set up query string
 					$querystring="SELECT resource.size,resource.type,booking.customerID,booking.resourceID,resource.name,resource.company,resource.location,DATE_FORMAT(booking.date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(booking.dateto,'%Y-%m-%d %H:%i') as dateto,booking.cost,booking.rebate,booking.position,booking.status,booking.auxdata FROM booking,resource WHERE resource.ID=booking.resourceID AND type=:TYPE ";					
 
-					if($date!="UNK") $querystring.=" AND date=:DATE";
-					if($searchresource!="UNK") {
+					if(!is_null($date)) $querystring.=" AND date=:DATE";
+					if(!is_null($searchresource)) {
 							$querystring.=" AND resourceID like :RESID";
-					}else if ($resourceID!="UNK"){
+					}else if (!is_null($resourceID)){
 							$querystring.=" AND resourceID=:RESID";
 					}
 					$querystring.=" ORDER BY resourceid,position";
@@ -29,8 +29,8 @@
 					$stmt = $pdo->prepare($querystring);
 		
 					// Bind parameters
-					if($date!="UNK") $stmt->bindParam(':DATE',$date);
-					if($resourceID!="UNK") $stmt->bindParam(':RESID',$resourceID);
+					if(!is_null($date)) $stmt->bindParam(':DATE',$date);
+					if(!is_null($resourceID)) $stmt->bindParam(':RESID',$resourceID);
 					$stmt->bindParam(':TYPE',$type);
 
 					// Execute

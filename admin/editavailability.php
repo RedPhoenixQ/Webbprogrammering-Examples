@@ -37,7 +37,7 @@
 			echo "<tr><td>ResourceID</td><td>";
 			echo "<SELECT NAME='resourceID'>";
 					$querystring="SELECT ID,name,company,location FROM resource";
-					if($filter!="UNK") $querystring.=" WHERE type='".$filter."'";
+					if(!is_null($filter)) $querystring.=" WHERE type='".$filter."'";
 					$querystring.=" ORDER BY name,company,location;";
 		      foreach($pdo->query($querystring) as $row){
 							echo "<OPTION value='".$row['ID']."'>&lt;".$row['name']."&gt; ".$row['company']." - ".$row['location'];
@@ -101,7 +101,7 @@
 					echo "<form action='editavailability.php' method='POST'>";
 					echo "<input type='hidden' name='resourceID' value='".$row['resourceID']."'>";
 					echo "<input type='hidden' name='date' value='".$row['date']."'>";
-					if ($filter!="UNK") echo "<input type='hidden' name='filter' value='".$filter."'>";
+					if (!is_null($filter)) echo "<input type='hidden' name='filter' value='".$filter."'>";
 					echo "<input name='Button' type='submit' value='Del'>";
 					echo "</form>";
 					echo "</td>";

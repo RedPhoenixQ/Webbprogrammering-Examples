@@ -9,22 +9,22 @@
 					$_POST=json_decode(file_get_contents('php://input', false),true);
 			}
 
-			$company="%".getpostAJAX("company")."%";
+			$company=getpostAJAX("company");
 			$type=getpostAJAX("type");
-			$location="%".getpostAJAX("location")."%";
-			$name="%".getpostAJAX("name")."%";
+			$location=getpostAJAX("location");
+			$name=getpostAJAX("name");
 			$fulltext=getpostAJAX("fulltext");
-			$resID="%".getpostAJAX("resID")."%";
-			$category="%".getpostAJAX("category")."%";
+			$resID=getpostAJAX("resID");
+			$category=getpostAJAX("category");
 			
-			if($fulltext!="UNK"){
+			if(!is_null($fulltext)){
 					$company="%".$fulltext."%";
 					$location="%".$fulltext."%";
 					$name="%".$fulltext."%";
 					$resID="%".$fulltext."%";
 			}
 
-			if($type=="UNK"){
+			if(is_null($type)){
 					err("Missing Form Data: (type)");					
 			}
 			
@@ -33,14 +33,19 @@
 			//---------------------------------------------------------------------------------------------------------------					
 
 			try{
-					if(getpostAJAX("category")!="UNK"||getpostAJAX("company")!="UNK"||getpostAJAX("location")!="UNK"||getpostAJAX("fulltext")!="UNK"||getpostAJAX("name")!="UNK"||getpostAJAX("resID")!="UNK"){
+					if(is_null($category)||is_null($company)||is_null($location)||is_null($fulltext)||is_null($name)||is_null($resID)){
 							$querystring="SELECT * FROM resource WHERE type=:TYPE AND (category like :CATEGORY or name like :NAME or company like :COMPANY or location like :LOCATION or id like :RESID)";
 							$stmt = $pdo->prepare($querystring);
 							$stmt->bindParam(':TYPE',$type);
+							$company = "%" . $company . "%";
 							$stmt->bindParam(':COMPANY',$company);
+							$category = "%" . $category . "%";
 							$stmt->bindParam(':CATEGORY',$category);							
+							$name = "%" . $name . "%";
 							$stmt->bindParam(':NAME',$name);
+							$location = "%" . $location . "%";
 							$stmt->bindParam(':LOCATION',$location);
+							$resID = "%" . $resID . "%";
 							$stmt->bindParam(':RESID',$resID);
 							$stmt->execute();
 					}else{

@@ -41,36 +41,38 @@
 			}
 
 			//---------------------------------------------------------------------------------------------------------------
-			// getpost - Allows us to pass posts even if array position does not exist
-			//---------------------------------------------------------------------------------------------------------------
+// getpost - Allows us to pass posts even if array position does not exist
+//---------------------------------------------------------------------------------------------------------------
 
-			function getpost($param) {
-					if(isset($_POST[$param])){
-							$ret=$_POST[$param];
-					}else{
-							$ret="";			
-					}
-					return $ret;
-			}
-			
-			//---------------------------------------------------------------------------------------------------------------
-			// getpostAJAX - Allows us to pass posts even if array position does not exist
-			//---------------------------------------------------------------------------------------------------------------
+function getpost($param)
+{
+	if (isset($_POST[$param])) {
+		$ret = $_POST[$param];
+	} else {
+		$ret = NULL;
+	}
+	return $ret;
+}
 
-			function getpostAJAX($param) {
-					if(isset($_POST[$param])){
-							if($_POST[$param]==="0"){
-									$ret="0";							
-							}else if(empty($_POST[$param])){
-									$ret="UNK";
-							}else{
-									$ret=htmlentities(urldecode($_POST[$param]));							
-							}
-					}else{
-							$ret="UNK";
-					}
-					return $ret;
-			}
+//---------------------------------------------------------------------------------------------------------------
+// getpostAJAX - Allows us to pass posts even if array position does not exist
+//---------------------------------------------------------------------------------------------------------------
+
+function getpostAJAX($param)
+{
+	if (isset($_POST[$param])) {
+		if ($_POST[$param] === "0") {
+			$ret = "0";
+		} else if (empty($_POST[$param])) {
+			$ret = NULL;
+		} else {
+			$ret = htmlentities(urldecode($_POST[$param]));
+		}
+	} else {
+		$ret = NULL;
+	}
+	return $ret;
+}
 
 			
 

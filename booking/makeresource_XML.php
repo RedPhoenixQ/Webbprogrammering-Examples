@@ -15,7 +15,7 @@
 			$cost=getpostAJAX("cost");
 			$auxdata=getpostAJAX("auxdata");
       
-			if (empty($ID) || empty($name) || empty($type) || empty($company) || empty($location) || empty($category) || empty($size) || empty($cost)) err("Missing Form Data (ID/Name/Type/Company/Location/Category/Size/Cost");
+			if (is_null($ID) || is_null($name) || is_null($type) || is_null($company) || is_null($location) || is_null($category) || is_null($size) || is_null($cost)) err("Missing Form Data (ID/Name/Type/Company/Location/Category/Size/Cost");
 
 				try{
 					$querystring="INSERT INTO resource(ID,name, type,company,location,category,size,cost,auxdata) values (:ID,:NAME,:TYPE,:COMPANY,:LOCATION,:CATEGORY,:SIZE,:COST,:AUXDATA);";

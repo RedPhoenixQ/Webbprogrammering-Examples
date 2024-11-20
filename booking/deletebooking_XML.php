@@ -10,7 +10,7 @@
 			$date=getpostAJAX("date");
 			$user=getpostAJAX("customerID");
 
-			if ($resource=="UNK" || $date=="UNK" || $user=="UNK" ) err("Missing Form Data: (resourceidID/userID/date)");
+			if (is_null($resource) || is_null($date) || is_null($user) ) err("Missing Form Data: (resourceidID/userID/date)");
 
 			try{
 				 $querystring="DELETE FROM booking WHERE customerID=:CUSTID and date=:DDATE and resourceID=:RESOURCEID";

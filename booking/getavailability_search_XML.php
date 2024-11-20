@@ -7,27 +7,27 @@
 
 		// Normal Search or ID Search
 		$resid=getpostAJAX("resid");	
-		$name="%".getpostAJAX("name")."%";
-		$location="%".getpostAJAX("location")."%";
-		$company="%".getpostAJAX("company")."%";
+		$name=getpostAJAX("name");
+		$location=getpostAJAX("location");
+		$company=getpostAJAX("company");
 		$type=getpostAJAX("type");
 
 		// Full text Search
 		$fulltext=getpostAJAX("fulltext");
-		if($fulltext!="UNK"){
+		if(!is_null($fulltext)){
 				$company="%".$fulltext."%";
 				$location="%".$fulltext."%";
 				$name="%".$fulltext."%";
 				$resID="%".$fulltext."%";
 		}
 
-		if($type=="UNK"){
+		if(is_null($type)){
 				err("Missing Form Data: (type)");					
 		}
 
 		try{
 				// Search either for ID or for resource!
-				if($fulltext!="UNK"){
+				if(!is_null($fulltext)){
 					$querystring="SELECT DATE_FORMAT(date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(dateto,'%Y-%m-%d %H:%i') as dateto,resourceID,name,location,company,size,cost,category,auxdata FROM resource,resourceavailability where resourceavailability.resourceID=resource.ID and (resource.company like :COMPANY or resource.name like :NAME or resource.location like :LOCATION or resource.ID=:RESID) and resource.type=:TYPE order by resourceID,date";
 					$stmt = $pdo->prepare($querystring);
 					$stmt->bindParam(':TYPE',$type);
@@ -36,13 +36,13 @@
 					$stmt->bindParam(':NAME',$name);
 					$stmt->bindParam(':LOCATION',$location);
 					$stmt->execute();
-				}else if($resid!="UNK"){
+				}else if(!is_null($resid)){
 					$querystring="SELECT DATE_FORMAT(date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(dateto,'%Y-%m-%d %H:%i') as dateto,resourceID,name,location,company,size,cost,category,auxdata FROM resource,resourceavailability where resourceavailability.resourceID=resource.ID and resource.ID=:RESID and resource.type=:TYPE order by resourceID,date";
 					$stmt = $pdo->prepare($querystring);
 					$stmt->bindParam(':TYPE',$type);
 					$stmt->bindParam(':RESID',$resid);
 					$stmt->execute();
-				}else if(($resid=="UNK")&&($name=="%UNK%")&&($location=="%UNK%")&&($company=="%UNK%")&&($fulltext=="UNK")){
+				}else if(is_null($resid) && is_null($name) && is_null($location) && is_null($company) && is_null($fulltext)){
 					$querystring="SELECT DATE_FORMAT(date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(dateto,'%Y-%m-%d %H:%i') as dateto,resourceID,name,location,company,size,cost,category,auxdata FROM resource,resourceavailability where resourceavailability.resourceID=resource.ID and resource.type=:TYPE order by resourceID,date";
 					$stmt = $pdo->prepare($querystring);
 					$stmt->bindParam(':TYPE',$type);
@@ -51,8 +51,11 @@
 					$querystring="SELECT DATE_FORMAT(date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(dateto,'%Y-%m-%d %H:%i') as dateto,resourceID,name,location,company,size,cost,category,auxdata FROM resource,resourceavailability where resourceavailability.resourceID=resource.ID and (resource.company like :COMPANY or resource.name like :NAME or resource.location like :LOCATION) and resource.type=:TYPE  order by resourceID,date";
 					$stmt = $pdo->prepare($querystring);
 					$stmt->bindParam(':TYPE',$type);
+					$company="%".$fulltext."%";
 					$stmt->bindParam(':COMPANY',$company);
+					$name="%".$fulltext."%";
 					$stmt->bindParam(':NAME',$name);
+					$location="%".$fulltext."%";
 					$stmt->bindParam(':LOCATION',$location);
 					$stmt->execute();
 				}

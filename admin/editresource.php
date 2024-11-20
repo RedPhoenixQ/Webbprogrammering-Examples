@@ -23,7 +23,7 @@
 			$category=getpost("category");
 			$auxdata=getpost("auxdata");
 	
-			if($filter==""){
+			if(is_null($filter) || empty($filter)){
 					$filter="No filter applied";
 			}
 	
