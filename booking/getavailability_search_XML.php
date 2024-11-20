@@ -10,7 +10,9 @@ $resid = getpostAJAX("resid");
 $name = getpostAJAX("name");
 $location = getpostAJAX("location");
 $company = getpostAJAX("company");
-$type = getpostAJAX("type");
+$type = getpostAJAX("type", true);
+
+reportMissingParams();
 
 // Full text Search
 $fulltext = getpostAJAX("fulltext");
@@ -19,10 +21,6 @@ if (!is_null($fulltext)) {
 	$location = "%" . $fulltext . "%";
 	$name = "%" . $fulltext . "%";
 	$resID = "%" . $fulltext . "%";
-}
-
-if (is_null($type)) {
-	err("Missing Form Data: (type)");
 }
 
 try {

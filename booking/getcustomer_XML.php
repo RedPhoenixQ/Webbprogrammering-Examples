@@ -5,11 +5,9 @@ if (empty($_POST)) {
 	$_POST = json_decode(file_get_contents('php://input', false), true);
 }
 
-$customerID = getpostAJAX("customerID");
+$customerID = getpostAJAX("customerID", true);
 
-if (is_null($customerID)) {
-	err("Missing Form Data: (customerID)");
-}
+reportMissingParams();
 
 try {
 	$querystring = "SELECT * FROM customer WHERE ID=:ID";

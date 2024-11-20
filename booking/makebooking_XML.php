@@ -6,19 +6,17 @@ if (empty($_POST)) {
 }
 
 // Get and escape the variables from post
-$resource = getpostAJAX("resourceID");
-$date = getpostAJAX("date");
+$resource = getpostAJAX("resourceID", true);
+$date = getpostAJAX("date", true);
 $dateto = getpostAJAX("dateto");
-$user = getpostAJAX("customerID");
+$user = getpostAJAX("customerID", true);
 $rebate = getpostAJAX("rebate");
-$status = getpostAJAX("status");
-$position = getpostAJAX("position");
+$status = getpostAJAX("status", true);
+$position = getpostAJAX("position", true);
 $auxdata = getpostAJAX("auxdata");
-$type = getpostAJAX("type");
+$type = getpostAJAX("type", true);
 
-if (is_null($user) || is_null($resource) || is_null($date) || is_null($type) || is_null($status) || is_null($position)) {
-	err("Missing Form Data: (type/customerID/resourceID/date/position/status)");
-}
+reportMissingParams();
 
 // Default to 1 day bookings
 if (is_null($dateto)) {

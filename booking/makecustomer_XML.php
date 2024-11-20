@@ -5,15 +5,14 @@ if (empty($_POST)) {
 	$_POST = json_decode(file_get_contents('php://input', false), true);
 }
 
-$ID = getpostAJAX("ID");
-$firstname = getpostAJAX("firstname");
-$lastname = getpostAJAX("lastname");
-$address = getpostAJAX("address");
-$email = getpostAJAX("email");
+$ID = getpostAJAX("ID", true);
+$firstname = getpostAJAX("firstname", true);
+$lastname = getpostAJAX("lastname", true);
+$address = getpostAJAX("address", true);
+$email = getpostAJAX("email", true);
 $auxdata = getpostAJAX("auxdata");
 
-if (is_null($ID) || is_null($firstname) || is_null($lastname) || is_null($address) || is_null($email))
-	err("Missing Form Data: (ID/firstname/lastname/address/email)");
+reportMissingParams();
 
 try {
 	$querystring = "INSERT INTO customer(lastvisit,ID, firstname,lastname,address,email,auxdata) values (NOW(),:ID,:FIRSTNAME,:LASTNAME,:ADDRESS,:EMAIL,:AUXDATA);";

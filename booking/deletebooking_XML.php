@@ -6,13 +6,11 @@ if (empty($_POST)) {
 }
 
 // Get and escape the variables from post
-$resource = getpostAJAX("resourceID");
-$date = getpostAJAX("date");
-$user = getpostAJAX("customerID");
+$resource = getpostAJAX("resourceID", true);
+$date = getpostAJAX("date", true);
+$user = getpostAJAX("customerID", true);
 
-if (is_null($resource) || is_null($date) || is_null($user)) {
-	err("Missing Form Data: (resourceidID/userID/date)");
-}
+reportMissingParams();
 
 try {
 	$querystring = "DELETE FROM booking WHERE customerID=:CUSTID and date=:DDATE and resourceID=:RESOURCEID";

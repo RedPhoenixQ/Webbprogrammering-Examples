@@ -44,27 +44,50 @@ function getpost($param)
 	return $ret;
 }
 
+$missingParams = [];
+
 /**
  * Allows us to pass posts even if array position does not exist
  * 
  * Will return NULL when param does not exits OR is empty
  * @param string $param
+ * @param ?boolean $required if the parameter needs to be present
  * @return string|null
  */
-function getpostAJAX($param)
+function getpostAJAX($param, $required = false)
 {
+	global $missingParams;
 	if (isset($_POST[$param])) {
 		if ($_POST[$param] === "0") {
 			$ret = "0";
 		} else if (empty($_POST[$param])) {
 			$ret = NULL;
+			if ($required) {
+				$missingParams[] = $param;
+			}
 		} else {
 			$ret = htmlentities(urldecode($_POST[$param]));
 		}
 	} else {
 		$ret = NULL;
+		if ($required) {
+			$missingParams[] = $param;
+		}
 	}
 	return $ret;
+}
+
+/**
+ * If any required params are missing, displays a nicely formatted error and exits
+ */
+function reportMissingParams()
+{
+	global $missingParams;
+	if (!empty($missingParams)) {
+		$errmsg = "Missing Params: (" . implode("/", $missingParams) . ")";
+		header("HTTP/1.0 400 " . $errmsg, true, 400);
+		echo $errmsg;
+	}
 }
 
 /**

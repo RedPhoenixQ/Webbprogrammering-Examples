@@ -8,11 +8,9 @@ if (empty($_POST)) {
 $resourceID = getpostAJAX("resourceID");
 $searchresource = getpostAJAX("searchresource");
 $date = getpostAJAX("date");
-$type = getpostAJAX("type");
+$type = getpostAJAX("type", true);
 
-if (is_null($type)) {
-	err("Missing Form Data: (type)");
-}
+reportMissingParams();
 
 try {
 	// Set up query string

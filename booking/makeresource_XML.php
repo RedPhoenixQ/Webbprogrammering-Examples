@@ -5,18 +5,17 @@ if (empty($_POST)) {
 	$_POST = json_decode(file_get_contents('php://input', false), true);
 }
 
-$ID = getpostAJAX("ID");
-$name = getpostAJAX("name");
-$type = getpostAJAX("type");
-$company = getpostAJAX("company");
-$location = getpostAJAX("location");
-$category = getpostAJAX("category");
-$size = getpostAJAX("size");
-$cost = getpostAJAX("cost");
+$ID = getpostAJAX("ID", true);
+$name = getpostAJAX("name", true);
+$type = getpostAJAX("type", true);
+$company = getpostAJAX("company", true);
+$location = getpostAJAX("location", true);
+$category = getpostAJAX("category", true);
+$size = getpostAJAX("size", true);
+$cost = getpostAJAX("cost", true);
 $auxdata = getpostAJAX("auxdata");
 
-if (is_null($ID) || is_null($name) || is_null($type) || is_null($company) || is_null($location) || is_null($category) || is_null($size) || is_null($cost))
-	err("Missing Form Data (ID/Name/Type/Company/Location/Category/Size/Cost");
+reportMissingParams();
 
 try {
 	$querystring = "INSERT INTO resource(ID,name, type,company,location,category,size,cost,auxdata) values (:ID,:NAME,:TYPE,:COMPANY,:LOCATION,:CATEGORY,:SIZE,:COST,:AUXDATA);";

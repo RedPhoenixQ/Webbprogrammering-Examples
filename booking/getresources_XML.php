@@ -10,22 +10,20 @@ if (empty($_POST)) {
 }
 
 $company = getpostAJAX("company");
-$type = getpostAJAX("type");
+$type = getpostAJAX("type", true);
 $location = getpostAJAX("location");
 $name = getpostAJAX("name");
 $fulltext = getpostAJAX("fulltext");
 $resID = getpostAJAX("resID");
 $category = getpostAJAX("category");
 
+reportMissingParams();
+
 if (!is_null($fulltext)) {
 	$company = "%" . $fulltext . "%";
 	$location = "%" . $fulltext . "%";
 	$name = "%" . $fulltext . "%";
 	$resID = "%" . $fulltext . "%";
-}
-
-if (is_null($type)) {
-	err("Missing Form Data: (type)");
 }
 
 //---------------------------------------------------------------------------------------------------------------

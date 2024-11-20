@@ -5,12 +5,10 @@ if (empty($_POST)) {
 	$_POST = json_decode(file_get_contents('php://input', false), true);
 }
 
-$customerID = getpostAJAX("customerID");
-$type = getpostAJAX("type");
+$customerID = getpostAJAX("customerID", true);
+$type = getpostAJAX("type", true);
 
-if (is_null($customerID) || is_null($type)) {
-	err("Missing Form Data: (customerID / type)");
-}
+reportMissingParams();
 
 try {
 	$querystring = "SELECT resource.type,booking.customerID,booking.resourceID,resource.name,resource.company,resource.location,DATE_FORMAT(booking.date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(booking.dateto,'%Y-%m-%d %H:%i') as dateto,booking.cost,booking.rebate,booking.position,booking.status,resource.category,resource.size,booking.auxdata FROM customer,booking,resource WHERE resource.ID=booking.resourceID AND booking.customerID=customer.ID AND customer.ID=:CUSTID AND type=:TYPE order by booking.date";
