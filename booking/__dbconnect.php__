@@ -11,22 +11,29 @@ define("DB_HOST", "localhost");
 define("DB_NAME", "BookingSystem");
 //---------------------------------------------------------------------------------------------------------------
 
-
+/**
+ * @var PDO
+ * @global
+ */
 $pdo = null;
 
-//---------------------------------------------------------------------------------------------------------------
-// presenthtml - Allows us to pass national characters - & is replaced with %
-//---------------------------------------------------------------------------------------------------------------
-
+/**
+ * Allows us to pass national characters - & is replaced with %
+ * @param string $str
+ * @return string
+ */
 function presenthtml($str)
 {
 	return str_replace("&", "%", $str);
 }
 
-//---------------------------------------------------------------------------------------------------------------
-// getpost - Allows us to pass posts even if array position does not exist
-//---------------------------------------------------------------------------------------------------------------
-
+/**
+ * Allows us to pass posts even if array position does not exist
+ * 
+ * Will return NULL when param does not exits
+ * @param string $param
+ * @return string|null
+ */
 function getpost($param)
 {
 	if (isset($_POST[$param])) {
@@ -37,10 +44,13 @@ function getpost($param)
 	return $ret;
 }
 
-//---------------------------------------------------------------------------------------------------------------
-// getpostAJAX - Allows us to pass posts even if array position does not exist
-//---------------------------------------------------------------------------------------------------------------
-
+/**
+ * Allows us to pass posts even if array position does not exist
+ * 
+ * Will return NULL when param does not exits OR is empty
+ * @param string $param
+ * @return string|null
+ */
 function getpostAJAX($param)
 {
 	if (isset($_POST[$param])) {
@@ -57,10 +67,11 @@ function getpostAJAX($param)
 	return $ret;
 }
 
-//---------------------------------------------------------------------------------------------------------------
-// err - Displays nicely formatted error and exits
-//---------------------------------------------------------------------------------------------------------------
-
+/**
+ * Displays a nicely formatted error and exits
+ * @param string $errmsg
+ * @return never
+ */
 function err($errmsg)
 {
 	header("HTTP/1.0 500 Internal server error:" . $errmsg, true, 500);
@@ -68,10 +79,13 @@ function err($errmsg)
 	exit;
 }
 
-//---------------------------------------------------------------------------------------------------------------
-// dbConnect - Makes database connection
-//---------------------------------------------------------------------------------------------------------------
-
+/**
+ * Makes database connection
+ * 
+ * This is called immediately
+ * @private 
+ * @return void
+ */
 function dbConnect()
 {
 
