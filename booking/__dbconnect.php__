@@ -1,28 +1,29 @@
 <?PHP
-			//---------------------------------------------------------------------------------------------------------------
-			// THIS FILE MUST BE RENAMED TO dbconnect.php AND YOU MUST UPDATE WITH CORRECT DB CREDENTIALS BELOW
-			// THIS FILE MUST BE RENAMED TO dbconnect.php AND YOU MUST UPDATE WITH CORRECT DB CREDENTIALS BELOW
-			// THIS FILE MUST BE RENAMED TO dbconnect.php AND YOU MUST UPDATE WITH CORRECT DB CREDENTIALS BELOW
-			//---------------------------------------------------------------------------------------------------------------
-			define("DB_USER","USER FROM CONSTRUCTION COURSE");
-			define("DB_PASSWORD","PASSWORD FROM CONSTRUCTION COURSE");
+//---------------------------------------------------------------------------------------------------------------
+// THIS FILE MUST BE RENAMED TO dbconnect.php AND YOU MUST UPDATE WITH CORRECT DB CREDENTIALS BELOW
+// THIS FILE MUST BE RENAMED TO dbconnect.php AND YOU MUST UPDATE WITH CORRECT DB CREDENTIALS BELOW
+// THIS FILE MUST BE RENAMED TO dbconnect.php AND YOU MUST UPDATE WITH CORRECT DB CREDENTIALS BELOW
+//---------------------------------------------------------------------------------------------------------------
+define("DB_USER", "USER FROM CONSTRUCTION COURSE");
+define("DB_PASSWORD", "PASSWORD FROM CONSTRUCTION COURSE");
 
-			define("DB_HOST","localhost");
-			define("DB_NAME","BookingSystem");
-			//---------------------------------------------------------------------------------------------------------------
+define("DB_HOST", "localhost");
+define("DB_NAME", "BookingSystem");
+//---------------------------------------------------------------------------------------------------------------
 
 
-      $pdo=null;
-			
-			//---------------------------------------------------------------------------------------------------------------
-			// presenthtml - Allows us to pass national characters - & is replaced with %
-			//---------------------------------------------------------------------------------------------------------------
+$pdo = null;
 
-			function presenthtml($str) {
-					return str_replace("&","%",$str);
-			}
+//---------------------------------------------------------------------------------------------------------------
+// presenthtml - Allows us to pass national characters - & is replaced with %
+//---------------------------------------------------------------------------------------------------------------
 
-			//---------------------------------------------------------------------------------------------------------------
+function presenthtml($str)
+{
+	return str_replace("&", "%", $str);
+}
+
+//---------------------------------------------------------------------------------------------------------------
 // getpost - Allows us to pass posts even if array position does not exist
 //---------------------------------------------------------------------------------------------------------------
 
@@ -56,44 +57,46 @@ function getpostAJAX($param)
 	return $ret;
 }
 
-			//---------------------------------------------------------------------------------------------------------------
-			// err - Displays nicely formatted error and exits
-			//---------------------------------------------------------------------------------------------------------------
-			
-			function err($errmsg) {
-					header("HTTP/1.0 500 Internal server error:".$errmsg,true,500);
-					echo $errmsg;
-					exit;
-			}
-			
-			//---------------------------------------------------------------------------------------------------------------
-			// dbConnect - Makes database connection
-			//---------------------------------------------------------------------------------------------------------------
-						
-			function dbConnect() {
-				
-				$printHeaderFunction=0;
-				
-				// send header info to err()?
-				if ($printHeaderFunction) {
-					$hdr = 'Database Connect Error';
-				} else {
-					$hdr = '';
-				}
+//---------------------------------------------------------------------------------------------------------------
+// err - Displays nicely formatted error and exits
+//---------------------------------------------------------------------------------------------------------------
 
-				global $pdo;
-				try {
-						$pdo = new PDO("mysql:dbname=".DB_NAME.";host=".DB_HOST, DB_USER, DB_PASSWORD);
-    				$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);						
-				} catch (PDOException $e) {
-				    err("Error!: ".$e->getMessage()."<br/>");
-				    die();
-				}
-							
-			}
+function err($errmsg)
+{
+	header("HTTP/1.0 500 Internal server error:" . $errmsg, true, 500);
+	echo $errmsg;
+	exit;
+}
 
-			dbConnect();
-			if(empty($_POST)){
-				$_POST=json_decode(file_get_contents('php://input', false),true);
-			}
+//---------------------------------------------------------------------------------------------------------------
+// dbConnect - Makes database connection
+//---------------------------------------------------------------------------------------------------------------
+
+function dbConnect()
+{
+
+	$printHeaderFunction = 0;
+
+	// send header info to err()?
+	if ($printHeaderFunction) {
+		$hdr = 'Database Connect Error';
+	} else {
+		$hdr = '';
+	}
+
+	global $pdo;
+	try {
+		$pdo = new PDO("mysql:dbname=" . DB_NAME . ";host=" . DB_HOST, DB_USER, DB_PASSWORD);
+		$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	} catch (PDOException $e) {
+		err("Error!: " . $e->getMessage() . "<br/>");
+		die();
+	}
+
+}
+
+dbConnect();
+if (empty($_POST)) {
+	$_POST = json_decode(file_get_contents('php://input', false), true);
+}
 ?>
