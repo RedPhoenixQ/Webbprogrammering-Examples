@@ -20,8 +20,6 @@
 
 	include '../booking/dbconnect.php';
 
-	dbConnect();
-
 	$button = getpost("Button");
 	$filter = getpost("filter");
 	$resourceid = getpost("resourceID");

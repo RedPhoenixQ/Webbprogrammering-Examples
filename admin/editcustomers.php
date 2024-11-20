@@ -24,8 +24,6 @@
 
 	include '../booking/dbconnect.php';
 
-	dbConnect();
-
 	$button = getpost("Button");
 
 	if ($button == 'Save' || $button == 'Del') {
