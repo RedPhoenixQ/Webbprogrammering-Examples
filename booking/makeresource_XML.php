@@ -1,10 +1,6 @@
 <?PHP
 include 'dbconnect.php';
 
-if (empty($_POST)) {
-	$_POST = json_decode(file_get_contents('php://input', false), true);
-}
-
 $ID = getpostAJAX("ID", true);
 $name = getpostAJAX("name", true);
 $type = getpostAJAX("type", true);

@@ -1,10 +1,6 @@
 <?PHP
 include 'dbconnect.php';
 
-if (empty($_POST)) {
-	$_POST = json_decode(file_get_contents('php://input', false), true);
-}
-
 // Get and escape the variables from post
 $resource = getpostAJAX("resourceID", true);
 $date = getpostAJAX("date", true);
