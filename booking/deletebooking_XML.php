@@ -16,6 +16,10 @@ try {
 	$stmt->bindParam(':RESOURCEID', $resource);
 	$stmt->execute();
 
+	if ($stmt->rowCount() != 1) {
+		err("No booking was deleted. The resourceID or date might not exist");
+	}
+
 	header("Content-Type:text/xml; charset=utf-8");
 	echo '<deleted status="OK"/>';
 } catch (PDOException $e) {
