@@ -43,28 +43,38 @@ try {
 		$stmt->bindParam(':RESID', $resID);
 		$stmt->execute();
 	} else {
-		$querystring = "SELECT * FROM resource WHERE type=:TYPE";
+		$querystring = "SELECT ID as id, name, company, location, size, cost, category, auxdata FROM resource WHERE type=:TYPE";
 		$stmt = $pdo->prepare($querystring);
 		$stmt->bindParam(':TYPE', $type);
 		$stmt->execute();
 	}
 
-	header("Content-Type:text/xml; charset=utf-8");
-	echo "<resources>\n";
-	foreach ($stmt as $key => $row) {
-		echo "<resource \n";
-		echo "    id='" . presenthtml($row['ID']) . "'\n";
-		echo "    name='" . presenthtml($row['name']) . "'\n";
-		echo "    company='" . presenthtml($row['company']) . "'\n";
-		echo "    location='" . presenthtml($row['location']) . "'\n";
-		echo "    size='" . $row['size'] . "'\n";
-		echo "    cost='" . $row['cost'] . "'\n";
-		echo "    category='" . $row['category'] . "'\n";
-		echo "    auxdata='" . $row['auxdata'] . "'\n";
-		echo " />\n";
-		echo "\n";
+	switch (determineResponseType()) {
+		case "xml":
+			header("Content-Type:text/xml; charset=utf-8");
+			echo "<resources>\n";
+			foreach ($stmt as $key => $row) {
+				echo "<resource \n";
+				echo "    id='" . presenthtml($row['id']) . "'\n";
+				echo "    name='" . presenthtml($row['name']) . "'\n";
+				echo "    company='" . presenthtml($row['company']) . "'\n";
+				echo "    location='" . presenthtml($row['location']) . "'\n";
+				echo "    size='" . $row['size'] . "'\n";
+				echo "    cost='" . $row['cost'] . "'\n";
+				echo "    category='" . $row['category'] . "'\n";
+				echo "    auxdata='" . $row['auxdata'] . "'\n";
+				echo " />\n";
+				echo "\n";
+			}
+			echo "</resources>";
+			break;
+		case "json":
+		default:
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			header("Content-Type:application/json; charset=utf-8");
+			echo json_encode($result);
+			break;
 	}
-	echo "</resources>";
 
 } catch (PDOException $e) {
 	err("Error!: " . $e->getMessage() . "<br/>");

@@ -90,9 +90,23 @@ if ($row['cnt'] == 0) {
 		// Make random artificial delay 1.5s - 2s
 		usleep(rand(3000, 5000) * 1000);
 
-		// Successfull booking
-		header("Content-Type:text/xml; charset=utf-8");
-		echo "<result size='" . $size . "' bookingcost='" . $cost . "' remaining='" . $remaining . "'   />";
+		switch (determineResponseType()) {
+			case "xml":
+				// Successfull booking
+				header("Content-Type:text/xml; charset=utf-8");
+				echo "<result size='" . $size . "' bookingcost='" . $cost . "' remaining='" . $remaining . "'   />";
+				break;
+			case "json":
+			default:
+				$result = [
+					"size" => $size,
+					"bookingcost" => $cost,
+					"remaining" => $remaining,
+				];
+				header("Content-Type:application/json; charset=utf-8");
+				echo json_encode($result);
+				break;
+		}
 
 	} catch (PDOException $e) {
 		err("Error!: " . $e->getMessage() . "<br/>");

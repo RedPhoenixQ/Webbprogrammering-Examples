@@ -20,8 +20,18 @@ try {
 		err("No booking was deleted. The resourceID or date might not exist");
 	}
 
-	header("Content-Type:text/xml; charset=utf-8");
-	echo '<deleted status="OK"/>';
+	switch (determineResponseType()) {
+		case "xml":
+			header("Content-Type:text/xml; charset=utf-8");
+			echo '<deleted status="OK"/>';
+			break;
+		case "json":
+		default:
+			header("Content-Type:application/json; charset=utf-8");
+			$result = ["status" => "ok"];
+			echo json_encode($result);
+			break;
+	}
 } catch (PDOException $e) {
 	err("Error!: " . $e->getMessage() . "<br/>");
 	die();

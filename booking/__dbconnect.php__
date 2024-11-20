@@ -103,6 +103,24 @@ function err($errmsg)
 }
 
 /**
+ * Determines the type of the response
+ * @return "json"|"xml"
+ */
+function determineResponseType()
+{
+	if (isset($_GET["type"])) {
+		switch ($_GET["type"]) {
+			case "xml":
+				return "xml";
+			case "json":
+				return "json";
+		}
+	}
+	// Default response type
+	return "xml";
+}
+
+/**
  * Makes database connection
  * 
  * This is called immediately

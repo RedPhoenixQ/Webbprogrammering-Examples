@@ -54,45 +54,74 @@ try {
 		$stmt->execute();
 	}
 
-	$output = "<avail>\n";
-	foreach ($stmt as $key => $row) {
-		$output .= "<availability \n";
+	switch (determineResponseType()) {
+		case "xmls":
+			$output = "<avail>\n";
+			foreach ($stmt as $key => $row) {
+				$output .= "<availability \n";
 
-		$querystring = "SELECT count(*) as counted FROM booking where resourceid=:RESID and date=:DATE";
-		$stmts = $pdo->prepare($querystring);
-		$stmts->bindParam(':RESID', $row['resourceID']);
-		$stmts->bindParam(':DATE', $row['date']);
-		$stmts->execute();
+				$querystring = "SELECT count(*) as counted FROM booking where resourceid=:RESID and date=:DATE";
+				$stmts = $pdo->prepare($querystring);
+				$stmts->bindParam(':RESID', $row['resourceID']);
+				$stmts->bindParam(':DATE', $row['date']);
+				$stmts->execute();
 
-		// Compute Remaining Resources for Date (equals)
-		foreach ($stmts as $kkey => $rrow) {
-			$counted = $rrow['counted'];
-		}
-		$size = $row['size'];
-		$remaining = $size - $counted;
+				// Compute Remaining Resources for Date (equals)
+				foreach ($stmts as $kkey => $rrow) {
+					$counted = $rrow['counted'];
+				}
+				$size = $row['size'];
+				$remaining = $size - $counted;
 
-		$output .= "    resourceID='" . presenthtml($row['resourceID']) . "'\n";
-		$output .= "    name='" . presenthtml($row['name']) . "'\n";
-		$output .= "    location='" . presenthtml($row['location']) . "'\n";
-		$output .= "    company='" . presenthtml($row['company']) . "'\n";
-		$output .= "    size='" . $row['size'] . "'\n";
-		$output .= "    cost='" . $row['cost'] . "'\n";
-		$output .= "    category='" . $row['category'] . "'\n";
-		$output .= "    date='" . $row['date'] . "'\n";
-		$output .= "    dateto='" . $row['dateto'] . "'\n";
-		$output .= "    auxdata='" . $row['auxdata'] . "'\n";
-		$output .= "    bookingcount='" . $counted . "'\n";
-		$output .= "    remaining='" . $remaining . "'\n";
+				$output .= "    resourceID='" . presenthtml($row['resourceID']) . "'\n";
+				$output .= "    name='" . presenthtml($row['name']) . "'\n";
+				$output .= "    location='" . presenthtml($row['location']) . "'\n";
+				$output .= "    company='" . presenthtml($row['company']) . "'\n";
+				$output .= "    size='" . $row['size'] . "'\n";
+				$output .= "    cost='" . $row['cost'] . "'\n";
+				$output .= "    category='" . $row['category'] . "'\n";
+				$output .= "    date='" . $row['date'] . "'\n";
+				$output .= "    dateto='" . $row['dateto'] . "'\n";
+				$output .= "    auxdata='" . $row['auxdata'] . "'\n";
+				$output .= "    bookingcount='" . $counted . "'\n";
+				$output .= "    remaining='" . $remaining . "'\n";
 
-		$output .= " />\n";
+				$output .= " />\n";
+			}
+			$output .= "</avail>\n";
+			header("Content-Type:text/xml; charset=utf-8");
+			echo $output;
+			break;
+		case "xml":
+		default:
+			header("Content-Type: application/json; charset=utf-8'");
+			$result = [];
+			$stmt->setFetchMode(PDO::FETCH_ASSOC);
+			foreach ($stmt as $key => $row) {
+
+				$querystring = "SELECT count(*) as counted FROM booking where resourceid=:RESID and date=:DATE";
+				$stmts = $pdo->prepare($querystring);
+				$stmts->bindParam(':RESID', $row['resourceID']);
+				$stmts->bindParam(':DATE', $row['date']);
+				$stmts->execute();
+
+				foreach ($stmts as $kkey => $rrow) {
+					$counted = $rrow['counted'];
+				}
+				$size = $row['size'];
+				$remaining = $size - $counted;
+
+				$row["bookingcount"] = $counted;
+				$row["remaining"] = $remaining;
+				$result[] = $row;
+			}
+			header("Content-Type:application/json; charset=utf-8");
+			echo json_encode($result);
+			break;
 	}
-	$output .= "</avail>\n";
 
 } catch (PDOException $e) {
 	err("Error!: " . $e->getMessage() . "<br/>");
 	die();
 }
-
-header("Content-Type:text/xml; charset=utf-8");
-echo $output;
 ?>
