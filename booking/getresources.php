@@ -28,7 +28,7 @@ if (!is_null($fulltext)) {
 
 try {
 	if (is_null($category) || is_null($company) || is_null($location) || is_null($fulltext) || is_null($name) || is_null($resID)) {
-		$querystring = "SELECT * FROM resource WHERE type=:TYPE AND (category like :CATEGORY or name like :NAME or company like :COMPANY or location like :LOCATION or id like :RESID)";
+		$querystring = "SELECT ID as id, name, company, location, size, cost, category, auxdata FROM resource WHERE type=:TYPE AND (category like :CATEGORY or name like :NAME or company like :COMPANY or location like :LOCATION or id like :RESID)";
 		$stmt = $pdo->prepare($querystring);
 		$stmt->bindParam(':TYPE', $type);
 		$company = "%" . $company . "%";
