@@ -39,7 +39,7 @@ try {
 			break;
 		case "json":
 		default:
-			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			$result = $stmt->fetch(PDO::FETCH_ASSOC);
 			header("Content-Type:application/json; charset=utf-8");
 			echo json_encode($result);
 			break;
