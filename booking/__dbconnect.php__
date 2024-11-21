@@ -109,15 +109,16 @@ function err($errmsg)
 function determineResponseType()
 {
 	if (isset($_GET["type"])) {
-		switch ($_GET["type"]) {
+		switch (strtolower($_GET["type"])) {
 			case "xml":
 				return "xml";
 			case "json":
+			default:
 				return "json";
 		}
 	}
 	// Default response type
-	return "xml";
+	return "json";
 }
 
 /**
