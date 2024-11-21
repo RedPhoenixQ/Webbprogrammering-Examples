@@ -19,10 +19,34 @@ if (!is_null($fulltext)) {
 	$resID = "%" . $fulltext . "%";
 }
 
+$querystring_start = "SELECT
+    DATE_FORMAT(avail.date, '%Y-%m-%d %H:%i') AS date,
+    DATE_FORMAT(avail.dateto, '%Y-%m-%d %H:%i') AS dateto,
+    avail.resourceID,
+    name,
+    location,
+    company,
+    size,
+    resource.cost,
+    category,
+    resource.auxdata,
+    count(booking.resourceID) AS bookingcount,
+    size - count(booking.resourceID) AS remaining
+FROM resourceavailability as avail
+JOIN resource ON avail.resourceID = resource.ID
+LEFT JOIN booking ON avail.resourceID = booking.resourceID AND booking.date BETWEEN avail.date AND avail.dateto ";
+$querystring_end = " GROUP BY
+   	avail.resourceID,
+   	avail.date,
+		avail.dateto
+ORDER BY
+    resource.ID,
+    avail.date";
+
 try {
 	// Search either for ID or for resource!
 	if (!is_null($fulltext)) {
-		$querystring = "SELECT DATE_FORMAT(date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(dateto,'%Y-%m-%d %H:%i') as dateto,resourceID,name,location,company,size,cost,category,auxdata FROM resource,resourceavailability where resourceavailability.resourceID=resource.ID and (resource.company like :COMPANY or resource.name like :NAME or resource.location like :LOCATION or resource.ID=:RESID) and resource.type=:TYPE order by resourceID,date";
+		$querystring = $querystring_start . "WHERE (resource.company like :COMPANY or resource.name like :NAME or resource.location like :LOCATION or resource.ID=:RESID) and resource.type=:TYPE" . $querystring_end;
 		$stmt = $pdo->prepare($querystring);
 		$stmt->bindParam(':TYPE', $type);
 		$stmt->bindParam(':RESID', $resid);
@@ -31,18 +55,18 @@ try {
 		$stmt->bindParam(':LOCATION', $location);
 		$stmt->execute();
 	} else if (!is_null($resid)) {
-		$querystring = "SELECT DATE_FORMAT(date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(dateto,'%Y-%m-%d %H:%i') as dateto,resourceID,name,location,company,size,cost,category,auxdata FROM resource,resourceavailability where resourceavailability.resourceID=resource.ID and resource.ID=:RESID and resource.type=:TYPE order by resourceID,date";
+		$querystring = $querystring_start . "WHERE resource.ID=:RESID and resource.type=:TYPE" . $querystring_end;
 		$stmt = $pdo->prepare($querystring);
 		$stmt->bindParam(':TYPE', $type);
 		$stmt->bindParam(':RESID', $resid);
 		$stmt->execute();
 	} else if (is_null($resid) && is_null($name) && is_null($location) && is_null($company) && is_null($fulltext)) {
-		$querystring = "SELECT DATE_FORMAT(date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(dateto,'%Y-%m-%d %H:%i') as dateto,resourceID,name,location,company,size,cost,category,auxdata FROM resource,resourceavailability where resourceavailability.resourceID=resource.ID and resource.type=:TYPE order by resourceID,date";
+		$querystring = $querystring_start . "WHERE resource.type=:TYPE" . $querystring_end;
 		$stmt = $pdo->prepare($querystring);
 		$stmt->bindParam(':TYPE', $type);
 		$stmt->execute();
 	} else {
-		$querystring = "SELECT DATE_FORMAT(date,'%Y-%m-%d %H:%i') as date,DATE_FORMAT(dateto,'%Y-%m-%d %H:%i') as dateto,resourceID,name,location,company,size,cost,category,auxdata FROM resource,resourceavailability where resourceavailability.resourceID=resource.ID and (resource.company like :COMPANY or resource.name like :NAME or resource.location like :LOCATION) and resource.type=:TYPE  order by resourceID,date";
+		$querystring = $querystring_start . "WHERE (resource.company like :COMPANY or resource.name like :NAME or resource.location like :LOCATION) and resource.type=:TYPE" . $querystring_end;
 		$stmt = $pdo->prepare($querystring);
 		$stmt->bindParam(':TYPE', $type);
 		$company = "%" . $fulltext . "%";
@@ -60,19 +84,6 @@ try {
 			foreach ($stmt as $key => $row) {
 				$output .= "<availability \n";
 
-				$querystring = "SELECT count(*) as counted FROM booking where resourceid=:RESID and date=:DATE";
-				$stmts = $pdo->prepare($querystring);
-				$stmts->bindParam(':RESID', $row['resourceID']);
-				$stmts->bindParam(':DATE', $row['date']);
-				$stmts->execute();
-
-				// Compute Remaining Resources for Date (equals)
-				foreach ($stmts as $kkey => $rrow) {
-					$counted = $rrow['counted'];
-				}
-				$size = $row['size'];
-				$remaining = $size - $counted;
-
 				$output .= "    resourceID='" . presenthtml($row['resourceID']) . "'\n";
 				$output .= "    name='" . presenthtml($row['name']) . "'\n";
 				$output .= "    location='" . presenthtml($row['location']) . "'\n";
@@ -83,8 +94,8 @@ try {
 				$output .= "    date='" . $row['date'] . "'\n";
 				$output .= "    dateto='" . $row['dateto'] . "'\n";
 				$output .= "    auxdata='" . $row['auxdata'] . "'\n";
-				$output .= "    bookingcount='" . $counted . "'\n";
-				$output .= "    remaining='" . $remaining . "'\n";
+				$output .= "    bookingcount='" . $row['bookingcount'] . "'\n";
+				$output .= "    remaining='" . $row['remaining'] . "'\n";
 
 				$output .= " />\n";
 			}
@@ -94,27 +105,7 @@ try {
 			break;
 		case "json":
 		default:
-			header("Content-Type: application/json; charset=utf-8'");
-			$result = [];
-			$stmt->setFetchMode(PDO::FETCH_ASSOC);
-			foreach ($stmt as $key => $row) {
-
-				$querystring = "SELECT count(*) as counted FROM booking where resourceid=:RESID and date=:DATE";
-				$stmts = $pdo->prepare($querystring);
-				$stmts->bindParam(':RESID', $row['resourceID']);
-				$stmts->bindParam(':DATE', $row['date']);
-				$stmts->execute();
-
-				foreach ($stmts as $kkey => $rrow) {
-					$counted = $rrow['counted'];
-				}
-				$size = $row['size'];
-				$remaining = $size - $counted;
-
-				$row["bookingcount"] = $counted;
-				$row["remaining"] = $remaining;
-				$result[] = $row;
-			}
+			$result = $stmt->fetchAll();
 			header("Content-Type:application/json; charset=utf-8");
 			echo json_encode($result);
 			break;
