@@ -12,10 +12,10 @@ try {
 	$stmt->execute();
 
 	// Update first so if it crashes we have not printed the data first
-	$querystring = "UPDATE customer SET lastvisit=now() WHERE ID=:ID";
-	$stmt = $pdo->prepare($querystring);
-	$stmt->bindParam(':ID', $customerID);
-	$stmt->execute();
+	$querystring2 = "UPDATE customer SET lastvisit=now() WHERE ID=:ID";
+	$stmt2 = $pdo->prepare($querystring2);
+	$stmt2->bindParam(':ID', $customerID);
+	$stmt2->execute();
 
 	switch (determineResponseType()) {
 		case 'xml':
