@@ -15,13 +15,13 @@ try {
 	foreach ($stmt as $key => $row) {
 		// At the moment do nothing!
 		$output .= "<customer \n";
-		$output .= "    id='" . presenthtml($row['ID']) . "'\n";
-		$output .= "    firstname='" . presenthtml($row['firstname']) . "'\n";
-		$output .= "    lastname='" . presenthtml($row['lastname'] . " ") . "'\n";
-		$output .= "    address='" . presenthtml($row['address']) . "'\n";
-		$output .= "    lastvisit='" . presenthtml($row['lastvisit']) . "'\n";
-		$output .= "    email='" . presenthtml($row['email']) . "'\n";
-		$output .= "    auxdata='" . presenthtml($row['auxdata']) . "'\n";
+		$output .= "    id='" . htmlentities($row['ID']) . "'\n";
+		$output .= "    firstname='" . htmlentities($row['firstname']) . "'\n";
+		$output .= "    lastname='" . htmlentities($row['lastname'] . " ") . "'\n";
+		$output .= "    address='" . htmlentities($row['address']) . "'\n";
+		$output .= "    lastvisit='" . htmlentities($row['lastvisit']) . "'\n";
+		$output .= "    email='" . htmlentities($row['email']) . "'\n";
+		$output .= "    auxdata='" . htmlentities($row['auxdata']) . "'\n";
 		$output .= " />\n";
 	}
 	$output .= "</customers>";

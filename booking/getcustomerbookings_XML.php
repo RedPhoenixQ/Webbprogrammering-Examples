@@ -18,12 +18,12 @@ try {
 	foreach ($stmt as $key => $row) {
 		// At the moment do nothing!
 		echo "<booking \n";
-		echo "    application='" . presenthtml($row['type']) . "'\n";
-		echo "    customerID='" . presenthtml($row['customerID']) . "'\n";
-		echo "    resourceID='" . presenthtml($row['resourceID']) . "'\n";
-		echo "    name='" . presenthtml($row['name']) . "'\n";
-		echo "    company='" . presenthtml($row['company']) . "'\n";
-		echo "    location='" . presenthtml($row['location']) . "'\n";
+		echo "    application='" . htmlentities($row['type']) . "'\n";
+		echo "    customerID='" . htmlentities($row['customerID']) . "'\n";
+		echo "    resourceID='" . htmlentities($row['resourceID']) . "'\n";
+		echo "    name='" . htmlentities($row['name']) . "'\n";
+		echo "    company='" . htmlentities($row['company']) . "'\n";
+		echo "    location='" . htmlentities($row['location']) . "'\n";
 		echo "    date='" . $row['date'] . "'\n";
 		echo "    dateto='" . $row['dateto'] . "'\n";
 		echo "    position='" . $row['position'] . "'\n";

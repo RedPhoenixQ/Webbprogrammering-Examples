@@ -53,10 +53,10 @@ try {
 	echo "<resources>\n";
 	foreach ($stmt as $key => $row) {
 		echo "<resource \n";
-		echo "    id='" . presenthtml($row['ID']) . "'\n";
-		echo "    name='" . presenthtml($row['name']) . "'\n";
-		echo "    company='" . presenthtml($row['company']) . "'\n";
-		echo "    location='" . presenthtml($row['location']) . "'\n";
+		echo "    id='" . htmlentities($row['ID']) . "'\n";
+		echo "    name='" . htmlentities($row['name']) . "'\n";
+		echo "    company='" . htmlentities($row['company']) . "'\n";
+		echo "    location='" . htmlentities($row['location']) . "'\n";
 		echo "    size='" . $row['size'] . "'\n";
 		echo "    cost='" . $row['cost'] . "'\n";
 		echo "    category='" . $row['category'] . "'\n";
