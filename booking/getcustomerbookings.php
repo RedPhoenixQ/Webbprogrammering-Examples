@@ -25,12 +25,12 @@ try {
       echo "<bookings>\n";
       foreach ($stmt as $key => $row) {
         echo "<booking \n";
-        echo "    application='" . presenthtml($row['application']) . "'\n";
-        echo "    customerID='" . presenthtml($row['customerID']) . "'\n";
-        echo "    resourceID='" . presenthtml($row['resourceID']) . "'\n";
-        echo "    name='" . presenthtml($row['name']) . "'\n";
-        echo "    company='" . presenthtml($row['company']) . "'\n";
-        echo "    location='" . presenthtml($row['location']) . "'\n";
+        echo "    application='" . htmlentities($row['application']) . "'\n";
+        echo "    customerID='" . htmlentities($row['customerID']) . "'\n";
+        echo "    resourceID='" . htmlentities($row['resourceID']) . "'\n";
+        echo "    name='" . htmlentities($row['name']) . "'\n";
+        echo "    company='" . htmlentities($row['company']) . "'\n";
+        echo "    location='" . htmlentities($row['location']) . "'\n";
         echo "    date='" . $row['date'] . "'\n";
         echo "    dateto='" . $row['dateto'] . "'\n";
         echo "    position='" . $row['position'] . "'\n";

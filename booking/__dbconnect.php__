@@ -18,16 +18,6 @@ define("DB_NAME", "BookingSystem");
 $pdo = null;
 
 /**
- * Allows us to pass national characters - & is replaced with %
- * @param string $str
- * @return string
- */
-function presenthtml($str)
-{
-	return str_replace("&", "%", $str);
-}
-
-/**
  * Allows us to pass posts even if array position does not exist
  * 
  * Will return NULL when param does not exits

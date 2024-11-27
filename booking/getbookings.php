@@ -38,19 +38,19 @@ try {
 			$output = "<bookings>\n";
 			foreach ($stmt as $key => $row) {
 				$output .= "<booking \n";
-				$output .= "    application='" . presenthtml($row['application']) . "'\n";
-				$output .= "    customerID='" . presenthtml($row['customerID']) . "'\n";
-				$output .= "    resourceID='" . presenthtml($row['resourceID']) . "'\n";
-				$output .= "    name='" . presenthtml($row['name']) . "'\n";
-				$output .= "    company='" . presenthtml($row['company']) . "'\n";
-				$output .= "    location='" . presenthtml($row['location']) . "'\n";
+				$output .= "    application='" . htmlentities($row['application']) . "'\n";
+				$output .= "    customerID='" . htmlentities($row['customerID']) . "'\n";
+				$output .= "    resourceID='" . htmlentities($row['resourceID']) . "'\n";
+				$output .= "    name='" . htmlentities($row['name']) . "'\n";
+				$output .= "    company='" . htmlentities($row['company']) . "'\n";
+				$output .= "    location='" . htmlentities($row['location']) . "'\n";
 				$output .= "    date='" . $row['date'] . "'\n";
 				$output .= "    dateto='" . $row['dateto'] . "'\n";
 				$output .= "    position='" . $row['position'] . "'\n";
 				$output .= "    status='" . $row['status'] . "'\n";
 				$output .= "    cost='" . $row['cost'] . "'\n";
 				$output .= "    size='" . $row['size'] . "'\n";
-				$output .= "    auxdata='" . presenthtml($row['auxdata']) . "'\n";
+				$output .= "    auxdata='" . htmlentities($row['auxdata']) . "'\n";
 				$output .= " />\n";
 			}
 			$output .= "</bookings>\n";
